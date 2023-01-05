@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace DatabaseAccess
 {
-    public class SQLDBInitializer : DBInitializer
+    public class SQLDBInitializer : IDBInitializer
     {
         private readonly DBConfiguration configs;
 
@@ -13,9 +13,8 @@ namespace DatabaseAccess
         }
 
         public async Task<string> CreateDB()
-        {
-            return "1";
-            /*using (var connection = configs.ConnectionString)
+        {            
+            using (var connection = configs.ConnectionString)
             {
                 try
                 {
@@ -41,7 +40,7 @@ namespace DatabaseAccess
                         connection.Close();
                     }
                 }                
-            }*/
+            }
         }        
     }
 }

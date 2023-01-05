@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccess
 {
-    public interface DBInitializer
+    public interface IDBInitializer
     {
         Task<string> CreateDB();
     }
