@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccess
 {
-    public interface IDBInitializer
+    public interface IDBDataChanger
     {
-        Task<string> CreateDB();
-
-        Task<string> DropDB();
     }
 }

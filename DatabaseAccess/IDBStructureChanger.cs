@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccess
 {
-    public interface IDBTableChanger
+    public interface IDBStructureChanger
     {
         public Task<string> CreateTable();
         public Task<string> AlterTable();

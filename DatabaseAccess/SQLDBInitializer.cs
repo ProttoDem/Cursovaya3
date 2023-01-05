@@ -14,7 +14,7 @@ namespace DatabaseAccess
 
         public async Task<string> CreateDB()
         {            
-            using (var connection = configs.ConnectionString)
+            using (var connection = configs.Connection)
             {
                 try
                 {
@@ -22,7 +22,7 @@ namespace DatabaseAccess
 
                     SqlCommand command = new SqlCommand();
                     // определяем выполняемую команду
-                    command.CommandText = "CREATE DATABASE " + configs.DatabaseName + ";";
+                    command.CommandText = "CREATE DATABASE " + configs.Name + ";";
                     // определяем используемое подключение
                     command.Connection = connection;
                     // выполняем команду
@@ -41,6 +41,11 @@ namespace DatabaseAccess
                     }
                 }                
             }
-        }        
+        }
+
+        public Task<string> DropDB()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
