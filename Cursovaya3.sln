@@ -4,10 +4,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cursovaya3", "Cursovaya3\Cursovaya3.csproj", "{091A7B5A-B2C8-4A75-AAED-5F1823D47EF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C4FD5FDF-3668-4720-A686-03DCBD4E9B84} = {C4FD5FDF-3668-4720-A686-03DCBD4E9B84}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseAccess", "DatabaseAccess\DatabaseAccess.csproj", "{078359E2-8521-419C-A375-23D7C48B0AF2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EAE115A0-E4B1-48EB-85C8-D2B0A8E50733} = {EAE115A0-E4B1-48EB-85C8-D2B0A8E50733}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{C4FD5FDF-3668-4720-A686-03DCBD4E9B84}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B1A58A87-A885-4B90-995A-AB8015FD5EB1} = {B1A58A87-A885-4B90-995A-AB8015FD5EB1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{EAE115A0-E4B1-48EB-85C8-D2B0A8E50733}"
 EndProject

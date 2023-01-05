@@ -13,8 +13,9 @@ namespace DatabaseAccess
         }
 
         public async Task<string> CreateDB()
-        {                      
-            using (var connection = configs.ConnectionString)
+        {
+            return "1";
+            /*using (var connection = configs.ConnectionString)
             {
                 try
                 {
@@ -40,7 +41,7 @@ namespace DatabaseAccess
                         connection.Close();
                     }
                 }                
-            }
+            }*/
         }        
     }
 }

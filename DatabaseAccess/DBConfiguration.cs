@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseAccess
 {
+    //DTO of DB entity
     public class DBConfiguration
     {
         public SqlConnection Connection { get
