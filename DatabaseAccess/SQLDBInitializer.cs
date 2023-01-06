@@ -27,7 +27,7 @@ namespace DatabaseAccess
                     command.Connection = connection;
                     // выполняем команду
                     await command.ExecuteNonQueryAsync();
-                    return "База данных создана";
+                    return "База даних створена";
                 }
                 catch (Exception ex)
                 {
@@ -43,9 +43,35 @@ namespace DatabaseAccess
             }
         }
 
-        public Task<string> DropDB()
+        public async Task<string> DropDB()
         {
-            throw new NotImplementedException();
+            using (var connection = configs.Connection)
+            {
+                try
+                {
+                    await connection.OpenAsync();   // открываем подключение
+
+                    SqlCommand command = new SqlCommand();
+                    // определяем выполняемую команду
+                    command.CommandText = "DROP DATABASE " + configs.Name + ";";
+                    // определяем используемое подключение
+                    command.Connection = connection;
+                    // выполняем команду
+                    await command.ExecuteNonQueryAsync();
+                    return "База даних видалена";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
+            }
         }
     }
 }

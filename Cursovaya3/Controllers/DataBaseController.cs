@@ -21,7 +21,7 @@ namespace Cursovaya3.Controllers
             return dbService.CreateDB(configs);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public string DropDB(DB_DTO configs)
         {
             DBService dbService = new DBService();

@@ -9,6 +9,10 @@ namespace BLL
 {
     public class DBService
     {
+        public DBService()
+        {
+
+        }
         public string CreateDB(DB_DTO configs)
         {
             SQLDBInitializer i = new SQLDBInitializer(new DBConfiguration { Name = configs.Name, 
