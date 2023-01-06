@@ -17,7 +17,10 @@ namespace DAL
         public DatabasesContext(DbContextOptions<DatabasesContext> options) : base(options)
         {
         }
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=master;Trusted_Connection=True;");
+        }*/
 
-        
     }
 }

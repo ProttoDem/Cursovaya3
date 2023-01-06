@@ -1,4 +1,4 @@
-using DatabaseAccess;
+using BLL;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cursovaya3.Controllers
@@ -15,9 +15,17 @@ namespace Cursovaya3.Controllers
         }
 
         [HttpPost]
-        public void CreateDB()
+        public string CreateDB(DB_DTO configs)
         {
-            
+            DBService dbService = new DBService();
+            return dbService.CreateDB(configs);
+        }
+
+        [HttpGet]
+        public string DropDB(DB_DTO configs)
+        {
+            DBService dbService = new DBService();
+            return dbService.CreateDB(configs);
         }
     }
 }
