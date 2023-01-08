@@ -5,7 +5,7 @@ namespace DAL
 {
     public class DatabasesContext : DbContext
     {
-        public DbSet<DB> Databeses { get; set; }
+        public DbSet<DBInfo> Databeses { get; set; }
         public DbSet<User> Users { get; set; } = null!;
         public DatabasesContext(DbContextOptions<DatabasesContext> options) : base(options)
         {

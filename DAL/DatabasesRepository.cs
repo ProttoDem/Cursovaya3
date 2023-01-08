@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class DatabasesRepository : BaseRepository<DB>, IDatabasesRepository
+    public class DatabasesRepository : BaseRepository<DBInfo>, IDatabasesRepository
     {
         public DatabasesRepository(DatabasesContext dbContext) : base(dbContext)
         {

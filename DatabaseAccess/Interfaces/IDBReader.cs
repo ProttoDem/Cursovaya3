@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatabaseAccess
+namespace DatabaseAccess.Interfaces
 {
-    public interface IDBInitializer
+    public interface IDBReader
     {
-        Task<string> CreateDB();
-
-        Task<string> DropDB();
+        public Task GetTables();
     }
 }

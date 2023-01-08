@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public interface IDatabasesRepository : IBaseRepository<DB>
+    public interface IDatabasesRepository : IBaseRepository<DBInfo>
     {
     }
 }
