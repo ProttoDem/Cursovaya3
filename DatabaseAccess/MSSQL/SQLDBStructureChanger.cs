@@ -9,6 +9,12 @@ namespace DatabaseAccess.MSSQL
 {
     public class SQLDBStructureChanger : IDBStructureChanger
     {
+        private readonly IDBExecuter executer;
+
+        public SQLDBStructureChanger(IDBExecuter _executer)
+        {
+            executer = _executer;
+        }
         public Task<string> AlterTable()
         {
             throw new NotImplementedException();

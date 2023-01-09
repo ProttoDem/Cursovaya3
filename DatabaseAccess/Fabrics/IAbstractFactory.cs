@@ -9,10 +9,10 @@ namespace DatabaseAccess.Fabrics
 {
     public interface IAbstractFactory
     {
-        IDBInitializer CreateDBInitializer(DBConfiguration config);
-        IDBReader CreateDBReader(DBConfiguration config);
-        IDBStructureChanger CreateDBStructureChanger(DBConfiguration config);
-        IDBDataChanger CreateDBDataChanger(DBConfiguration config);
-        IDBProxy CreateDBProxy(DBConfiguration config, IDBInitializer dBInitializer, IDBReader dBReader, IDBStructureChanger dBStructureChanger, IDBDataChanger dBDataChanger);
+        IDBInitializer CreateDBInitializer(IDBExecuter executer);
+        IDBReader CreateDBReader(IDBExecuter executer);
+        IDBStructureChanger CreateDBStructureChanger(IDBExecuter executer);
+        IDBDataChanger CreateDBDataChanger(IDBExecuter executer);
+        IDBExecuter CreateDBExecuter(DBConfiguration config);
     }
 }

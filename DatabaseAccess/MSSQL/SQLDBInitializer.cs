@@ -1,59 +1,55 @@
 ﻿using DatabaseAccess.Interfaces;
+using MySqlConnector;
 using System.Data;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace DatabaseAccess.MSSQL
 {
     public class SQLDBInitializer : IDBInitializer
-    {                        
-        private readonly DBConfiguration configs;
+    {
+        private readonly IDBExecuter executer;
 
-        public SQLDBInitializer(DBConfiguration db_config)
+        public SQLDBInitializer(IDBExecuter _executer)
         {
-            configs = db_config;
+            executer = _executer;
         }
 
         public async Task<string> CreateDB()
-        {               
-            SqlCommand command = new SqlCommand();
-            // определяем выполняемую команду
-            command.CommandText = "CREATE DATABASE " + configs.Name + ";";
-            // определяем используемое подключение
-            command.Connection = configs.Connection;
-            // выполняем команду
-            await command.ExecuteNonQueryAsync();
-            return "База даних створена";                       
+        {
+            
+            async Task<string> Create(string name, SqlConnection sqlConnection)
+            {
+                SqlCommand command = new SqlCommand();
+                // определяем выполняемую команду
+                command.CommandText = "CREATE DATABASE " + name + ";";
+                // определяем используемое подключение
+                command.Connection = sqlConnection;
+                // выполняем команду
+                await command.ExecuteNonQueryAsync();
+                return "База даних створена";
+            }
+
+            Func<string, SqlConnection, Task<string>> task = Create;
+            return await executer.Execute(task);
         }
 
         public async Task<string> DropDB()
         {
-            using (var connection = configs.Connection)
+            async Task<string> Drop(string name, SqlConnection sqlConnection)
             {
-                try
-                {
-                    await connection.OpenAsync();   // открываем подключение
-
-                    SqlCommand command = new SqlCommand();
-                    // определяем выполняемую команду
-                    command.CommandText = "DROP DATABASE " + configs.Name + ";";
-                    // определяем используемое подключение
-                    command.Connection = connection;
-                    // выполняем команду
-                    await command.ExecuteNonQueryAsync();
-                    return "База даних видалена";
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
-                finally
-                {
-                    if (connection.State == ConnectionState.Open)
-                    {
-                        connection.Close();
-                    }
-                }
+                SqlCommand command = new SqlCommand();
+                // определяем выполняемую команду
+                command.CommandText = "DROP DATABASE " + name + ";";
+                // определяем используемое подключение
+                command.Connection = sqlConnection;
+                // выполняем команду
+                await command.ExecuteNonQueryAsync();
+                return "База даних deleted";
             }
+
+            Func<string, SqlConnection, Task<string>> task = Drop;
+            return await executer.Execute(task);
         }
     }
 }

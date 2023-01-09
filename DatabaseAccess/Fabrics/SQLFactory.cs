@@ -10,29 +10,29 @@ namespace DatabaseAccess.Fabrics
 {
     public class SQLFactory : IAbstractFactory
     {
-        public IDBDataChanger CreateDBDataChanger(DBConfiguration config)
+        public IDBDataChanger CreateDBDataChanger(IDBExecuter executer)
         {
-            return new SQLDBDataChanger();
+            return new SQLDBDataChanger(executer);
         }
 
-        public IDBInitializer CreateDBInitializer(DBConfiguration config)
+        public IDBInitializer CreateDBInitializer(IDBExecuter executer)
         {
-            return new SQLDBInitializer(config);
+            return new SQLDBInitializer(executer);
         }
 
-        public IDBProxy CreateDBProxy(DBConfiguration config, IDBInitializer dBInitializer, IDBReader dBReader, IDBStructureChanger dBStructureChanger, IDBDataChanger dBDataChanger)
+        public IDBExecuter CreateDBExecuter(DBConfiguration config)
         {
-            return new SQLDBProxy(config, dBInitializer, dBReader, dBStructureChanger, dBDataChanger);
+            return new SQLExecuter(config);
         }
 
-        public IDBReader CreateDBReader(DBConfiguration config)
+        public IDBReader CreateDBReader(IDBExecuter executer)
         {
-            return new SQLDBReader(config);
+            return new SQLDBReader(executer);
         }
 
-        public IDBStructureChanger CreateDBStructureChanger(DBConfiguration config)
+        public IDBStructureChanger CreateDBStructureChanger(IDBExecuter executer)
         {
-            return new SQLDBStructureChanger();
+            return new SQLDBStructureChanger(executer);
         }
     }
 }

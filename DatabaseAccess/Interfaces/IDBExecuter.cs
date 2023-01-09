@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DatabaseAccess.Interfaces
 {
-    public interface IDBProxy : IDBInitializer, IDBReader, IDBDataChanger, IDBStructureChanger, IDisposable
+    public interface IDBExecuter : IDisposable
     {
-        public string CheckConnection();
+        Task<string> Execute(Func<string, SqlConnection, Task<string>> command);
     }
 }
