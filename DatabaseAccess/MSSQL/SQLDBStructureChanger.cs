@@ -1,9 +1,7 @@
 ﻿using DatabaseAccess.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using System.Data.SqlClient;
+
 
 namespace DatabaseAccess.MSSQL
 {
@@ -15,19 +13,65 @@ namespace DatabaseAccess.MSSQL
         {
             executer = _executer;
         }
-        public Task<string> AlterTable()
+        public Task<string> AlterTable(string tableName, IEnumerable<TableColumn> tableColumns)
         {
             throw new NotImplementedException();
+
         }
 
-        public Task<string> CreateTable()
+        public async Task<string> CreateTable(string tableName, IEnumerable<TableColumn> tableColumns)
         {
-            throw new NotImplementedException();
+            async Task<string> Create(string name, SqlConnection sqlConnection)
+            {
+                SqlCommand command = new SqlCommand();
+                string sql = "CREATE TABLE " + tableName + "(";
+                foreach (var column in tableColumns)
+                {
+                    sql += column.Name + " " + column.DataType + " ";
+                    if (column.NOT_NULL)
+                    {
+                        sql += "NOT NULL ";
+                    }
+                    if (column.UNIQUE)
+                    {
+                        sql += "UNIQUE ";
+                    }
+                    if (column.PRIMARY_KEY)
+                    {
+                        sql += "PRIMARY KEY";
+                    }
+                    sql += ",";
+                }
+                sql += ");";
+                // определяем выполняемую команду
+                command.CommandText = sql;
+                // определяем используемое подключение
+                command.Connection = sqlConnection;
+                // выполняем команду
+                await command.ExecuteNonQueryAsync();
+                return "Таблиця " + tableName + "створена";
+            }
+            Func<string, SqlConnection, Task<string>> task = Create;
+            return await executer.Execute(task);
+            
         }
 
-        public Task<string> DropTable()
+        public async Task<string> DropTable(string tableName)
         {
-            throw new NotImplementedException();
+            async Task<string> Drop(string name, SqlConnection sqlConnection)
+            {
+                SqlCommand command = new SqlCommand();
+                // определяем выполняемую команду
+                command.CommandText = "DROP TABLE " + tableName + ";";
+                // определяем используемое подключение
+                command.Connection = sqlConnection;
+                // выполняем команду
+                await command.ExecuteNonQueryAsync();
+                return "Таблиця "+ tableName + " видалена";
+            }
+
+            Func<string, SqlConnection, Task<string>> task = Drop;
+            return await executer.Execute(task);
         }
     }
 }

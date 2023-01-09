@@ -8,8 +8,8 @@ namespace DatabaseAccess.Interfaces
 {
     public interface IDBStructureChanger
     {
-        public Task<string> CreateTable();
-        public Task<string> AlterTable();
-        public Task<string> DropTable();
+        public Task<string> CreateTable(string tableName, IEnumerable<TableColumn> columns);
+        public Task<string> AlterTable(string tableName, IEnumerable<TableColumn> columns);
+        public Task<string> DropTable(string tableName);
     }
 }

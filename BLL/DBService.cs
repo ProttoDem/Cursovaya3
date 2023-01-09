@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class DBService
+    public class DBService : IDBService
     {
         public DBService()
         {
@@ -55,6 +55,50 @@ namespace BLL
                 default:
                     return "Not found";
             }
+        }
+
+        public string CreateTable(DB_DTO configs, Table_DTO table)
+        {
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var structureChanger = fabric.CreateDBStructureChanger(executer);
+                    return structureChanger.CreateTable(table.Name, table.Columns).Result;
+                default:
+                    return "Something went wrong";
+            }
+        }
+
+        public string DropTable(DB_DTO configs, Table_DTO table)
+        {
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var structureChanger = fabric.CreateDBStructureChanger(executer);
+                    return structureChanger.DropTable(table.Name).Result;
+                default:
+                    return "Something went wrong";
+            }
+        }
+
+        public string AlterTable(DB_DTO configs, Table_DTO table)
+        {
+            throw new NotImplementedException();
         }
     }
 }

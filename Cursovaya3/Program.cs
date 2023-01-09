@@ -1,3 +1,4 @@
+using BLL;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DatabasesContext>(options => options.UseSqlServer(connection));
+builder.Services.AddScoped<IDBService, DBService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
