@@ -1,4 +1,5 @@
 using BLL;
+using Cursovaya3.AutoMapperConfigs;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ builder.Services.AddSwaggerGen();
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DatabasesContext>(options => options.UseSqlServer(connection));
 builder.Services.AddScoped<IDBService, DBService>();
+builder.Services.AddAutoMapper(typeof(InsertDataProfile));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -13,10 +13,63 @@ namespace DatabaseAccess.MSSQL
         {
             executer = _executer;
         }
-        public Task<string> AlterTable(string tableName, IEnumerable<TableColumn> tableColumns)
+        public async Task<string> AlterTable(string tableName, IEnumerable<TableColumnAlter> tableColumns)
         {
-            throw new NotImplementedException();
+            async Task<string> Alter(string name, SqlConnection sqlConnection)
+            {
+                SqlCommand command = new SqlCommand();
+                string sql = "ALTER TABLE " + tableName + " ";
+                foreach (var column in tableColumns)
+                {
+                    sql += column.Action + " " ;
+                    switch (column.Action)
+                    {
+                        case ("ADD"):
+                            sql += column.Name + " " + column.DataType + " ";
+                            if (column.NOT_NULL)
+                            {
+                                sql += "NOT NULL ";
+                            }
+                            if (column.UNIQUE)
+                            {
+                                sql += "UNIQUE ";
+                            }
+                            if (column.PRIMARY_KEY)
+                            {
+                                sql += "PRIMARY KEY";
+                            }
+                            break;
 
+                        case ("RENAME"):
+                            sql = "EXEC sp_rename '" + tableName+"."+column.Name+ "', '"+column.NewName + "'";                            
+                            break;
+
+                        case ("DROP"):
+                            sql += "COLUMN " + column.Name;                            
+                            break;
+
+                        case ("ALTER"):
+                            sql += "COLUMN " + column.Name + " " + column.NewDataType + " ";
+                            break;
+                        default:
+                            sql = "";
+                            break;
+                    }                   
+                    
+                    sql += "";                
+
+                }
+                sql += ";";
+                // определяем выполняемую команду
+                command.CommandText = sql;
+                // определяем используемое подключение
+                command.Connection = sqlConnection;
+                // выполняем команду
+                await command.ExecuteNonQueryAsync();
+                return "Таблиця " + tableName + "створена";
+            }
+            Func<string, SqlConnection, Task<string>> task = Alter;
+            return await executer.Execute(task);
         }
 
         public async Task<string> CreateTable(string tableName, IEnumerable<TableColumn> tableColumns)

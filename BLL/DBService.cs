@@ -98,6 +98,69 @@ namespace BLL
 
         public string AlterTable(DB_DTO configs, Table_DTO table)
         {
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var structureChanger = fabric.CreateDBStructureChanger(executer);
+                    return structureChanger.AlterTable(table.Name, table.AlterColumns).Result;
+                default:
+                    return "Something went wrong";
+            }
+        }
+
+        public string InsertData(DB_DTO configs, InsertData_DTO insertData)
+        {
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+            InsertData insert = new InsertData
+            {
+                TableName = insertData.TableName,
+                InsertColumns = insertData.InsertColumns
+            };
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var dataChanger = fabric.CreateDBDataChanger(executer);
+                    return dataChanger.Insert(insert).Result;
+                default:
+                    return "Something went wrong";
+            }
+        }
+
+        public string ReadData(DB_DTO configs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ReadData(DB_DTO configs, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ReadDataId(DB_DTO configs, int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteData(DB_DTO configs, int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string UpdateData(DB_DTO configs, InsertData insert)
+        {
             throw new NotImplementedException();
         }
     }

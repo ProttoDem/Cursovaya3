@@ -1,4 +1,6 @@
+using AutoMapper;
 using BLL;
+using DatabaseAccess;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Nodes;
 
@@ -9,10 +11,12 @@ namespace Cursovaya3.Controllers
     public class DataBaseController : ControllerBase
     {        
         private readonly IDBService dbService;
+        private readonly IMapper _mapper;
 
-        public DataBaseController(IDBService _dBService)
+        public DataBaseController(IDBService _dBService, IMapper mapper)
         {
             dbService = _dBService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -39,5 +43,18 @@ namespace Cursovaya3.Controllers
             return dbService.DropTable(db_table.DB_DTO, db_table.Table_DTO);
         }
 
+
+        [HttpPatch]
+        public string AlterTable(DB_Table db_table)
+        {
+            return dbService.AlterTable(db_table.DB_DTO, db_table.Table_DTO);
+        }
+
+        [HttpPost]
+        public string InsertData(DB_Insert_DTO insert)
+        {
+            //НЕ видит insertData внутри DTO
+            return dbService.InsertData(insert.db_dto, insert.insertData);
+        }
     }
 }
