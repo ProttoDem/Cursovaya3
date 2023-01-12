@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class InsertData_DTO
+    public class ReadData_DTO
     {
         public string TableName { get; set; }
-        public IEnumerable<string>? InsertColumns { get; set; }
+        public int? Top { get; set; }
+        public string? Condition { get; set; }
+
     }
 }

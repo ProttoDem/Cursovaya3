@@ -12,22 +12,36 @@ namespace DatabaseAccess.MSSQL
             executer = _executer;
         }
 
-        public Task<string> Delete(string id)
+        public async Task<string> Delete(DeleteData deleteData)
         {
-            throw new NotImplementedException();
+            async Task<string> Delete(string name, SqlConnection sqlConnection)
+            {
+                SqlCommand command = new SqlCommand();
+                // определяем выполняемую команду
+                string sql = "Delete FROM " + deleteData.TableName + " WHERE " + deleteData.Condition + " ;";
+                command.CommandText = sql;
+                command.Connection = sqlConnection;
+                // выполняем команду
+                await command.ExecuteNonQueryAsync();
+                return "Видалено строку з таблицы " + deleteData.TableName;
+            }
+
+            Func<string, SqlConnection, Task<string>> task = Delete;
+            return await executer.Execute(task);
         }
 
         public async Task<string> Insert(InsertData insertData)
         {
-            async Task<string> Drop(string name, SqlConnection sqlConnection)
+            async Task<string> InsertData(string name, SqlConnection sqlConnection)
             {
                 SqlCommand command = new SqlCommand();
                 // определяем выполняемую команду
                 string sql = "insert into " + insertData.TableName + " values( ";
                 foreach (var input in insertData.InsertColumns)
                 {
-                    sql += $"'{input}', ";
+                    sql += $"'{input}',";
                 }
+                sql = sql[..^1];
                 sql += ")";
                 command.CommandText = sql;
                 command.Connection = sqlConnection;
@@ -36,7 +50,7 @@ namespace DatabaseAccess.MSSQL
                 return "Додано строку у таблицю " + insertData.TableName;
             }
 
-            Func<string, SqlConnection, Task<string>> task = Drop;
+            Func<string, SqlConnection, Task<string>> task = InsertData;
             return await executer.Execute(task);
         }
 

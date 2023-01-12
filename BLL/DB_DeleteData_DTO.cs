@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class InsertData_DTO
+    public class DB_DeleteData_DTO
     {
-        public string TableName { get; set; }
-        public IEnumerable<string>? InsertColumns { get; set; }
+        public DB_DTO? db_dto { get; set; }
+        public DeleteData_DTO? delete_dto { get; set; }
     }
 }

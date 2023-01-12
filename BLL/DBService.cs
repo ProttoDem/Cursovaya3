@@ -139,27 +139,46 @@ namespace BLL
             }
         }
 
-        public string ReadData(DB_DTO configs)
+        public string ReadData(DB_DTO configs, ReadData_DTO readData)
         {
             throw new NotImplementedException();
         }
 
-        public string ReadData(DB_DTO configs, int count)
+        public string ReadDataTop(DB_DTO configs, ReadData_DTO readData)
         {
             throw new NotImplementedException();
         }
 
-        public string ReadDataId(DB_DTO configs, int id)
+        public string ReadDataCondition(DB_DTO configs, ReadData_DTO readData)
         {
             throw new NotImplementedException();
         }
 
-        public string DeleteData(DB_DTO configs, int id)
+        public string DeleteData(DB_DTO configs, DeleteData_DTO deleteData)
         {
-            throw new NotImplementedException();
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+            DeleteData delete = new DeleteData
+            {
+                TableName = deleteData.TableName,
+                Condition = deleteData.Condition
+            };
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var dataChanger = fabric.CreateDBDataChanger(executer);
+                    return dataChanger.Delete(delete).Result;
+                default:
+                    return "Something went wrong";
+            }
         }
 
-        public string UpdateData(DB_DTO configs, InsertData insert)
+        public string UpdateData(DB_DTO configs, InsertData_DTO insert)
         {
             throw new NotImplementedException();
         }

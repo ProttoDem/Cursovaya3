@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL
+namespace DatabaseAccess
 {
-    public class InsertData_DTO
+    public class ReadData
     {
         public string TableName { get; set; }
-        public IEnumerable<string>? InsertColumns { get; set; }
+        public int? Top { get; set; }
+        public string? Condition { get; set; }
+
     }
 }

@@ -51,10 +51,17 @@ namespace Cursovaya3.Controllers
         }
 
         [HttpPost]
-        public string InsertData(DB_Insert_DTO insert)
+        public string InsertData(DB_InsertData_DTO insert)
         {
             //НЕ видит insertData внутри DTO
             return dbService.InsertData(insert.db_dto, insert.insertData);
+        }
+
+        [HttpDelete]
+        public string DeleteData(DB_DeleteData_DTO delete)
+        {
+            //НЕ видит insertData внутри DTO
+            return dbService.DeleteData(delete.db_dto, delete.delete_dto);
         }
     }
 }

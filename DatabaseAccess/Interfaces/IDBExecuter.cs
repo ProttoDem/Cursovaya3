@@ -10,5 +10,6 @@ namespace DatabaseAccess.Interfaces
     public interface IDBExecuter : IDisposable
     {
         Task<string> Execute(Func<string, SqlConnection, Task<string>> command);
+        Task<IEnumerable<string>> ExecuteMany(Func<string, SqlConnection, Task<IEnumerable<string>>> command);
     }
 }

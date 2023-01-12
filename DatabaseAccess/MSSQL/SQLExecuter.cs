@@ -40,5 +40,30 @@ namespace DatabaseAccess.MSSQL
                 }
             }
         }
+
+        public async Task<IEnumerable<string>> ExecuteMany(Func<string, SqlConnection, Task<IEnumerable<string>>> command)
+        {
+            using (var connection = DBConfiguration.Connection)
+            {
+                try
+                {
+                    await connection.OpenAsync();   // открываем подключение
+                    return await command(DBConfiguration.Name, connection);
+                }
+                catch (Exception ex)
+                {
+                    var res = new List<string>();
+                    res.Add(ex.Message);
+                    return res;
+                }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+        }
     }
 }
