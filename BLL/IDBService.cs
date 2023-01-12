@@ -21,5 +21,8 @@ namespace BLL
         string ReadDataCondition(DB_DTO configs, ReadData_DTO readData);
         string UpdateData(DB_DTO configs, InsertData_DTO update);
         string DeleteData(DB_DTO configs, DeleteData_DTO deleteData);
+        IEnumerable<string> GetTables(DB_DTO configs);
+        IEnumerable<string> GetSequences(DB_DTO configs);
+        IEnumerable<string> GetColumns(DB_DTO configs, string tableName);
     }
 }

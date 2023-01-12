@@ -182,5 +182,36 @@ namespace BLL
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<string> GetTables(DB_DTO configs)
+        {
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var reader = fabric.CreateDBReader(executer);
+                    return reader.GetTables().Result;
+                default:
+                    var res = new List<string>();
+                    res.Add("Something went wrong");
+                    return res;
+            }
+        }
+
+        public IEnumerable<string> GetSequences(DB_DTO configs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> GetColumns(DB_DTO configs, string tableName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

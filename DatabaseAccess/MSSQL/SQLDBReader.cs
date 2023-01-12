@@ -10,7 +10,7 @@ namespace DatabaseAccess.MSSQL
 
         private static void ReadSingleRow(IDataRecord dataRecord, List<string> result)
         {
-            result.Add(String.Format("{0}, {1}", dataRecord[0], dataRecord[1]));
+            result.Add(dataRecord[0].ToString());
         }
 
         public SQLDBReader(IDBExecuter _executer)
@@ -18,26 +18,32 @@ namespace DatabaseAccess.MSSQL
             executer = _executer;
         }        
 
-        public async Task<IEnumerable<TableColumn>> GetColumns(string tableName)
+        public async Task<IEnumerable<string>> GetColumns(string tableName)
         {
-            async Task<string> Columns(string name, SqlConnection sqlConnection)
-            {
+            
+                async Task<IEnumerable<string>> Columns(string name, SqlConnection sqlConnection)
+                {
                 SqlCommand command = new SqlCommand();
                 // определяем выполняемую команду
-                command.CommandText = "DROP TABLE " + tableName + ";";
+                command.CommandText = "SELECT *\r\nFROM INFORMATION_SCHEMA.COLUMNS\r\nWHERE TABLE_NAME = N'" + tableName + "'";
                 // определяем используемое подключение
                 command.Connection = sqlConnection;
                 // выполняем команду
-                await command.ExecuteNonQueryAsync();
-                return "Таблиця " + tableName + " видалена";
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                List<string> tables = new List<string>();
+                while (reader.Read())
+                {
+                    ReadSingleRow((IDataRecord)reader, tables);
+                }
+                return tables;
             }
 
-            Func<string, SqlConnection, Task<string>> task = Columns;
-            return await executer.Execute(task);       
-        
+            Func<string, SqlConnection, Task<IEnumerable<string>>> task = Columns;
+            return await executer.ExecuteMany(task);
+
         }
 
-        public Task<IEnumerable<Sequence>> GetSequences()
+        public Task<IEnumerable<string>> GetSequences()
         {
             throw new NotImplementedException();
         }

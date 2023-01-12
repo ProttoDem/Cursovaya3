@@ -63,5 +63,12 @@ namespace Cursovaya3.Controllers
             //НЕ видит insertData внутри DTO
             return dbService.DeleteData(delete.db_dto, delete.delete_dto);
         }
+
+        [HttpPost]
+        public IEnumerable<string> GetTables(DB_DTO configs)
+        {
+            //НЕ видит insertData внутри DTO
+            return dbService.GetTables(configs);
+        }
     }
 }
