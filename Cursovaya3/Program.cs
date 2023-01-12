@@ -13,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DatabasesContext>(options => options.UseSqlServer(connection));
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IDatabasesRepository, DatabasesRepository>();
 builder.Services.AddScoped<IDBService, DBService>();
 builder.Services.AddAutoMapper(typeof(InsertDataProfile));
 var app = builder.Build();

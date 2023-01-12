@@ -1,6 +1,8 @@
-﻿using DatabaseAccess;
+﻿using DAL;
+using DatabaseAccess;
 using DatabaseAccess.Fabrics;
 using DatabaseAccess.MSSQL;
+using Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,32 +13,17 @@ namespace BLL
 {
     public class DBService : IDBService
     {
-        public DBService()
-        {
+        private readonly IUsersRepository _usersRepository;
+        private readonly IDatabasesRepository _databasesRepository;
 
-        }
-        public string CreateDB(DB_DTO configs)
+        public DBService(IUsersRepository usersRepository, IDatabasesRepository databasesRepository)
         {
-            DBConfiguration dBConfiguration = new DBConfiguration
-            {
-                Name = configs.Name,
-                ConnectionString = configs.ConnectionString
-            };
-
-            switch (configs.Type)
-            {
-                case ("SQL"):
-                    var fabric = new SQLFactory();
-                    var executer = fabric.CreateDBExecuter(dBConfiguration);
-                    var initializer = fabric.CreateDBInitializer(executer);
-                    return initializer.CreateDB().Result;
-                    
-                default:
-                    return "Цей тип БД або не існує, або ще не підтримується";                    
-            }
+            _usersRepository = usersRepository;
+            _databasesRepository = databasesRepository;
         }
 
-        public string DropDB(DB_DTO configs){
+        public async Task<string> CreateDB(DB_DTO configs)
+        {
             
             DBConfiguration dBConfiguration = new DBConfiguration
             {
@@ -50,6 +37,29 @@ namespace BLL
                     var fabric = new SQLFactory();
                     var executer = fabric.CreateDBExecuter(dBConfiguration);
                     var initializer = fabric.CreateDBInitializer(executer);
+                    await _databasesRepository.AddAsync(new DBInfo {ConnectionString = configs.ConnectionString, Name = configs.Name, Type = configs.Type }) ;
+                    return initializer.CreateDB().Result;
+                    
+                default:
+                    return "Цей тип БД або не існує, або ще не підтримується";                    
+            }
+        }
+
+        public async Task<string> DropDB(DB_DTO configs){
+            
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var initializer = fabric.CreateDBInitializer(executer);
+                    await _databasesRepository.DeleteAsync(new DBInfo { ConnectionString = configs.ConnectionString, Name = configs.Name, Type = configs.Type });
                     return initializer.DropDB().Result;
 
                 default:
@@ -211,7 +221,44 @@ namespace BLL
 
         public IEnumerable<string> GetColumns(DB_DTO configs, string tableName)
         {
-            throw new NotImplementedException();
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var reader = fabric.CreateDBReader(executer);
+                    return reader.GetColumns(tableName).Result;
+                default:
+                    var res = new List<string>();
+                    res.Add("Something went wrong");
+                    return res;
+            }
+        }
+
+        public IEnumerable<string> GetSchema(DB_DTO configs)
+        {
+            DBConfiguration dBConfiguration = new DBConfiguration
+            {
+                Name = configs.Name,
+                ConnectionString = configs.ConnectionString
+            };
+            switch (configs.Type)
+            {
+                case ("SQL"):
+                    var fabric = new SQLFactory();
+                    var executer = fabric.CreateDBExecuter(dBConfiguration);
+                    var reader = fabric.CreateDBReader(executer);
+                    return reader.GetSchema().Result;
+                default:
+                    var res = new List<string>();
+                    res.Add("Something went wrong");
+                    return res;
+            }
         }
     }
 }

@@ -9,8 +9,8 @@ namespace BLL
 {
     public interface IDBService
     {
-        string CreateDB(DB_DTO configs);
-        string DropDB(DB_DTO configs);
+        Task<string> CreateDB(DB_DTO configs);
+        Task<string> DropDB(DB_DTO configs);
         string CreateTable(DB_DTO configs, Table_DTO table);
         string DropTable(DB_DTO configs, Table_DTO table);
         string AlterTable(DB_DTO configs, Table_DTO table);
@@ -24,5 +24,6 @@ namespace BLL
         IEnumerable<string> GetTables(DB_DTO configs);
         IEnumerable<string> GetSequences(DB_DTO configs);
         IEnumerable<string> GetColumns(DB_DTO configs, string tableName);
+        IEnumerable<string> GetSchema(DB_DTO configs);
     }
 }

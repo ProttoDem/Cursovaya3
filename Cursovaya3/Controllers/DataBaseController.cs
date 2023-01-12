@@ -22,13 +22,13 @@ namespace Cursovaya3.Controllers
         [HttpPost]
         public string CreateDB(DB_DTO configs)
         {
-            return dbService.CreateDB(configs);
+            return dbService.CreateDB(configs).Result;
         }
 
         [HttpDelete]
         public string DropDB(DB_DTO configs)
         {
-            return dbService.DropDB(configs);
+            return dbService.DropDB(configs).Result;
         }
 
         [HttpPost]
@@ -67,8 +67,20 @@ namespace Cursovaya3.Controllers
         [HttpPost]
         public IEnumerable<string> GetTables(DB_DTO configs)
         {
-            //НЕ видит insertData внутри DTO
             return dbService.GetTables(configs);
         }
+
+        [HttpPost]
+        public IEnumerable<string> GetSchema(DB_DTO configs)
+        {
+            return dbService.GetSchema(configs);
+        }
+
+        [HttpPost]
+        public IEnumerable<string> GetColumns(DB_Table configs)
+        {
+            return dbService.GetColumns(configs.DB_DTO, configs.Table_DTO.Name);
+        }
+
     }
 }
